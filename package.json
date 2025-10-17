@@ -14,6 +14,7 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.11.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.0.2",
@@ -24,6 +25,7 @@
     "drizzle-orm": "^0.44.6",
     "lucide-react": "^0.546.0",
     "next": "15.5.5",
+    "next-auth": "5.0.0-beta.29",
     "next-plausible": "^3.12.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
