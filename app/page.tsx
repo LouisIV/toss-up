@@ -140,14 +140,15 @@ export default function Home() {
 
       </div>
 
-      {/* Return to Landing Page Button */}
-      <button
-        onClick={resetOnboarding}
-        className="fixed bottom-4 right-4 z-50 bg-black/80 backdrop-blur-xl border border-white/30 rounded-full px-4 py-2 text-xs text-white/70 hover:text-white hover:border-white/50 transition-all duration-300 hover:shadow-xl"
-        title="View landing page again"
-      >
-        View Landing Page
-      </button>
+      {/* Footer */}
+      <footer className="relative z-10 py-8 text-center">
+        <button
+          onClick={resetOnboarding}
+          className="text-xs text-white/40 hover:text-white/70 transition-colors duration-200 underline-offset-4 hover:underline"
+        >
+          View landing page
+        </button>
+      </footer>
     </div>
   )
 }
