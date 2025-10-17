@@ -79,31 +79,21 @@ vercel
 2. Add the following variable:
    - `DATABASE_URL` - Paste your Neon connection string here
 
-## Step 4: Deploy Database Schema
+## Step 4: Database Schema Deployment
 
-After your first deployment, you need to run the database migrations:
+The database schema will be automatically deployed during the build process. The `vercel-build` script runs `drizzle-kit push` before building the application, ensuring your database schema is up-to-date.
 
-1. Go to your Vercel project dashboard
-2. Navigate to "Functions" tab
-3. Create a new API route at `app/api/migrate/route.ts` (temporary):
+### Manual Migration (if needed)
 
-```typescript
-import { db } from '@/lib/db/client';
-import { sql } from 'drizzle-orm';
+If you need to run migrations manually, you can use the Drizzle CLI:
 
-export async function GET() {
-  try {
-    // Run your schema creation here
-    // This is a one-time setup
-    return Response.json({ message: 'Database schema created successfully' });
-  } catch (error) {
-    return Response.json({ error: 'Failed to create schema' }, { status: 500 });
-  }
-}
+```bash
+# Generate migration files
+pnpm db:generate
+
+# Push schema changes to database
+pnpm db:push
 ```
-
-3. Visit `https://your-app.vercel.app/api/migrate` to run the migration
-4. Delete the migration route after successful setup
 
 ## Step 5: Verify Deployment
 
@@ -123,10 +113,11 @@ export async function GET() {
 ## Build Configuration
 
 The project is configured with:
-- **Build Command**: `pnpm build`
+- **Build Command**: `pnpm vercel-build` (runs migrations + build)
 - **Install Command**: `pnpm install`
 - **Framework**: Next.js
 - **Node.js Version**: 18.x (default)
+- **Database Migrations**: Automatically run during build via `drizzle-kit push`
 
 ## Troubleshooting
 

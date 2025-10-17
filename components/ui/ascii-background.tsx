@@ -10,8 +10,8 @@ interface AsciiBackgroundProps {
 // Liquid glass character set - creates flowing patterns
 const CHAR = "          `~._ASCII_.~`      `~._ASCII_.~`"
 const MAX = CHAR.length * 2
-let FRAMES = 2000
-let BLUR_STEPS = 100
+const FRAMES = 2000
+const BLUR_STEPS = 100
 
 // FrameLoop class for smooth animation
 class FrameLoop {
@@ -55,7 +55,7 @@ class FrameLoop {
 export function AsciiBackground({ children, className = '' }: AsciiBackgroundProps) {
   const preRef = useRef<HTMLPreElement>(null)
   const animationRef = useRef<number | undefined>(undefined)
-  const waveMapRef = useRef<FrameLoop[][]>()
+  const waveMapRef = useRef<FrameLoop[][]>([])
   const canvasWidthRef = useRef<number>(0)
   const canvasHeightRef = useRef<number>(0)
 
@@ -74,7 +74,7 @@ export function AsciiBackground({ children, className = '' }: AsciiBackgroundPro
 
   const setup = (width: number, height: number) => {
     // Create initial random wave map
-    let waveMap = createLayer(width, height)
+    const waveMap = createLayer(width, height)
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         waveMap[y][x] = (Math.random() * MAX).toString()
@@ -85,7 +85,7 @@ export function AsciiBackground({ children, className = '' }: AsciiBackgroundPro
     for (let step = 0; step < BLUR_STEPS; step++) {
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          let value = parseFloat(waveMap[y][x])
+          const value = parseFloat(waveMap[y][x])
           const left = x > 0 ? parseFloat(waveMap[y][x - 1]) : value
           const right = x < width - 1 ? parseFloat(waveMap[y][x + 1]) : value
           const top = y > 0 ? parseFloat(waveMap[y - 1][x]) : value

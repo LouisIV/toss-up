@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface FreeAgentFormProps {
-  onSuccess?: (result: any) => void
+  onSuccess?: (result: unknown) => void
   onCancel?: () => void
   isInDialog?: boolean
 }
@@ -70,7 +70,7 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
             Register as Free Agent
           </CardTitle>
           <p className="text-sm text-white/70 text-center">
-            We'll pair you with another free agent to form a team
+            We&apos;ll pair you with another free agent to form a team
           </p>
           <p className="text-xs text-white/50 text-center mt-2">
             Fill out the form and tap to confirm
@@ -80,7 +80,7 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
       {isInDialog && (
         <div className="mb-4">
           <p className="text-sm text-white/70 text-center">
-            We'll pair you with another free agent to form a team
+            We&apos;ll pair you with another free agent to form a team
           </p>
           <p className="text-xs text-white/50 text-center mt-2">
             Fill out the form and tap to confirm

@@ -7,7 +7,7 @@ import { hasMatchResults, regenerateTournamentBracket } from '@/lib/tournament-u
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 
 interface LineupManagerProps {
   tournament: Tournament
@@ -40,7 +40,7 @@ export function LineupManager({ tournament, allTeams }: LineupManagerProps) {
     !lineup.some(lineupTeam => lineupTeam.id === team.id)
   )
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return
 
     const items = Array.from(lineup)

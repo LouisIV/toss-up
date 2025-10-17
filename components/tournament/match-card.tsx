@@ -12,8 +12,8 @@ interface MatchCardProps {
   teams: Team[]
   tournamentId: string
   round: number
-  currentBracket: any
-  onBracketUpdate: (newBracket: any) => void
+  currentBracket: unknown
+  onBracketUpdate: (newBracket: unknown) => void
 }
 
 export function MatchCard({ match, teams, tournamentId, round, currentBracket, onBracketUpdate }: MatchCardProps) {

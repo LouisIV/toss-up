@@ -38,7 +38,7 @@ export default function TournamentPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center text-white">
           <h1 className="text-2xl font-bold mb-4">Tournament Not Found</h1>
-          <p className="text-white/70 mb-6">The tournament you're looking for doesn't exist.</p>
+          <p className="text-white/70 mb-6">The tournament you&apos;re looking for doesn&apos;t exist.</p>
           <Button onClick={() => router.push('/')}>
             Back to Home
           </Button>
@@ -185,7 +185,7 @@ export default function TournamentPage() {
               <CardContent className="p-8 text-center">
                 <h3 className="text-xl font-bold mb-4">No Bracket Data</h3>
                 <p className="text-white/70 mb-6">
-                  This tournament doesn't have bracket data yet. You may need to regenerate the bracket.
+                  This tournament doesn&apos;t have bracket data yet. You may need to regenerate the bracket.
                 </p>
                 <Button variant="outline">
                   Regenerate Bracket (Coming Soon)

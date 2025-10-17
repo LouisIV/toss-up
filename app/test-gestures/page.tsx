@@ -47,8 +47,8 @@ export default function TestGesturesPage() {
     }
 
     try {
-      if (typeof (DeviceMotionEvent as any).requestPermission === 'function') {
-        const permission = await (DeviceMotionEvent as any).requestPermission()
+      if (typeof (DeviceMotionEvent as unknown as { requestPermission?: () => Promise<string> }).requestPermission === 'function') {
+        const permission = await (DeviceMotionEvent as unknown as { requestPermission: () => Promise<string> }).requestPermission()
         if (permission === 'granted') {
           setHasPermission(true)
           return true
@@ -485,7 +485,7 @@ export default function TestGesturesPage() {
             <CardTitle>How to Test</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
-            <p>1. Click "Start Listening" to begin motion detection</p>
+            <p>1. Click &quot;Start Listening&quot; to begin motion detection</p>
             <p>2. Adjust the threshold slider to change sensitivity (higher = less sensitive)</p>
             <p>3. Try different wrist flick motions and watch the graph</p>
             <p>4. The red dashed line shows your current threshold</p>

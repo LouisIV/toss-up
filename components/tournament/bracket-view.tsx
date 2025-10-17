@@ -16,7 +16,7 @@ export function BracketView({ bracketData, teams, tournamentId }: BracketViewPro
   // This ensures we always show the latest data from the server
   const currentBracket = bracketData
 
-  const handleBracketUpdate = (newBracket: BracketData) => {
+  const handleBracketUpdate = (newBracket: unknown) => {
     // This is now handled by query invalidation in the backend
     // No need to update local state
   }

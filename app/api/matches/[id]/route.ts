@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
-import { matches, tournaments } from '@/lib/db/schema';
+import { matches, tournaments, teams } from '@/lib/db/schema';
 import { matchUpdateSchema } from '@/lib/validations';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, inArray } from 'drizzle-orm';
 import { TournamentSolver } from '@/lib/tournament-solver';
 
 export async function PATCH(
@@ -68,9 +68,13 @@ export async function PATCH(
     console.log('Using bracketMatchId:', bracketMatchId);
     
     // Create a solver to process the match result
-    // We need to reconstruct the teams from the tournament lineup
-    const teams = tournament.lineup?.map((teamId: string) => ({ id: teamId })) || [];
-    const solver = new TournamentSolver(teams, tournament.tableCount);
+    // We need to fetch the actual team data from the tournament lineup
+    const teamIds = tournament.lineup || [];
+    const tournamentTeams = teamIds.length > 0 
+      ? await db.select().from(teams).where(inArray(teams.id, teamIds))
+      : [];
+    
+    const solver = new TournamentSolver(tournamentTeams, tournament.tableCount);
     // Set the current bracket state
     solver['bracketData'] = tournament.bracketData;
     

@@ -44,7 +44,7 @@ export function TeamForm({ initialValues, onSuccess, onCancel, isInDialog = fals
     },
   })
 
-  const onSubmit = useCallback(async (data: any) => {
+  const onSubmit = useCallback(async (data: { name: string; player1: string; player2: string; mascotUrl?: string }) => {
     if (isSubmitting) {
       console.log('Form submission already in progress, ignoring duplicate submission')
       return
@@ -60,9 +60,9 @@ export function TeamForm({ initialValues, onSuccess, onCancel, isInDialog = fals
       }
       reset()
       onSuccess?.()
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error saving team:', error)
-      if (error?.message?.includes('already exists')) {
+      if ((error as Error)?.message?.includes('already exists')) {
         setSubmitError('A team with this name already exists. Please choose a different name.')
       } else {
         setSubmitError('Failed to save team. Please try again.')

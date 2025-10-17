@@ -40,7 +40,7 @@ export async function PUT(
     const body = await request.json();
     const { name, status, bracketData, lineup, tableCount } = body;
 
-    const updateData: any = {};
+    const updateData: Partial<typeof tournaments.$inferInsert> = {};
     if (name !== undefined) updateData.name = name;
     if (status !== undefined) updateData.status = status;
     if (bracketData !== undefined) updateData.bracketData = bracketData;

@@ -29,9 +29,9 @@ export async function POST(request: NextRequest) {
         .insert(freeAgents)
         .values(validatedData)
         .returning();
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Handle unique constraint violation gracefully
-      const message = String(e?.message || '')
+      const message = String((e as Error)?.message || '')
       if (message.includes('free_agents_phone_unique_idx') || message.toLowerCase().includes('unique')) {
         return NextResponse.json(
           { error: 'Phone number already registered as a free agent' },
@@ -132,8 +132,8 @@ export async function PATCH(request: NextRequest) {
           )
         );
 
-      const agent1 = agents.find((a: any) => a.id === agent1Id);
-      const agent2 = agents.find((a: any) => a.id === agent2Id);
+      const agent1 = agents.find((a) => a.id === agent1Id);
+      const agent2 = agents.find((a) => a.id === agent2Id);
 
       if (!agent1 || !agent2) {
         return NextResponse.json(

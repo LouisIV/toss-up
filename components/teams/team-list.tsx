@@ -126,12 +126,13 @@ export function TeamList() {
           </DialogHeader>
           <FreeAgentForm
             isInDialog={true}
-            onSuccess={(result) => {
+            onSuccess={(result: unknown) => {
               setIsAddingFreeAgent(false)
               setRegistrationMode(null)
               // Show success message if paired
-              if (result.status === 'paired' && result.team) {
-                alert(`Great! You've been paired with ${result.partner?.name} to form team "${result.team.name}"`)
+              if (result && typeof result === 'object' && 'status' in result && result.status === 'paired' && 'team' in result && result.team) {
+                const typedResult = result as { status: string; team: { name: string }; partner?: { name: string } };
+                alert(`Great! You've been paired with ${typedResult.partner?.name} to form team "${typedResult.team.name}"`)
               } else {
                 alert('You\'ve been registered as a free agent. We\'ll pair you with someone soon!')
               }

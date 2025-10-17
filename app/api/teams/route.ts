@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
 import { teams } from '@/lib/db/schema';
 import { teamSchema } from '@/lib/validations';
-import { eq, ilike } from 'drizzle-orm';
+import { ilike } from 'drizzle-orm';
 
 export async function GET() {
   try {

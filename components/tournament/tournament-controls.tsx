@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button'
 import { TossButton } from '@/components/ui/toss-button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 
 interface TournamentControlsProps {
   teams: Team[]
-  onTournamentCreated: (tournament: any) => void
+  onTournamentCreated: (tournament: { id: string }) => void
   hasActiveTournament?: boolean
 }
 
@@ -47,7 +47,7 @@ export function TournamentControls({ teams, onTournamentCreated, hasActiveTourna
     }
   }
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return
 
     const items = Array.from(lineup)

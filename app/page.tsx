@@ -7,19 +7,18 @@ import { AsciiBackground } from '@/components/ui/ascii-background'
 import { TeamList } from '@/components/teams/team-list'
 import { FreeAgentsStatus } from '@/components/teams/free-agents-status'
 import { TournamentControls } from '@/components/tournament/tournament-controls'
-import { Button } from '@/components/ui/button'
 
 export default function Home() {
   const router = useRouter()
   const { data: teams = [] } = useTeams()
   const { data: tournaments = [] } = useTournaments()
 
-  const handleTournamentCreated = (tournament: any) => {
+  const handleTournamentCreated = (tournament: { id: string }) => {
     // Navigate to the new tournament page
     router.push(`/tournament/${tournament.id}`)
   }
 
-  const handleTournamentClick = (tournament: any) => {
+  const handleTournamentClick = (tournament: { id: string }) => {
     router.push(`/tournament/${tournament.id}`)
   }
 
