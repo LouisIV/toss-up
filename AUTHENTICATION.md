@@ -38,9 +38,6 @@ Create a `.env.local` file in the project root:
 # Database
 DATABASE_URL=your_database_url_here
 
-# Base URL (update for production)
-NEXT_PUBLIC_BASE_URL=http://localhost:3000
-
 # GitHub OAuth
 GITHUB_CLIENT_ID=your_github_client_id
 GITHUB_CLIENT_SECRET=your_github_client_secret
@@ -52,6 +49,8 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 # Admin emails (comma-separated, case-insensitive)
 ADMIN_EMAILS=your-email@example.com,another-admin@example.com
 ```
+
+**Note:** You don't need to set `NEXT_PUBLIC_BASE_URL` - it's automatically detected from Vercel's environment or defaults to `http://localhost:3000` for local development.
 
 ### 3. Run Database Migrations
 
@@ -82,20 +81,20 @@ Admin users can:
 
 1. Push your code to GitHub
 2. Import the project in Vercel
-3. Add the following environment variables in your Vercel project settings:
+3. Deploy once to get your Vercel URL (e.g., `https://your-app.vercel.app`)
+4. Update your OAuth callback URLs in GitHub and Google to use your Vercel URL:
+   - GitHub: `https://your-app.vercel.app/api/auth/callback/github`
+   - Google: `https://your-app.vercel.app/api/auth/callback/google`
+5. Add the following environment variables in your Vercel project settings:
    - `DATABASE_URL`
-   - `NEXT_PUBLIC_BASE_URL` (your production URL, e.g., `https://your-app.vercel.app`)
    - `GITHUB_CLIENT_ID`
    - `GITHUB_CLIENT_SECRET`
    - `GOOGLE_CLIENT_ID`
    - `GOOGLE_CLIENT_SECRET`
    - `ADMIN_EMAILS`
+6. Redeploy to apply the environment variables
 
-4. Update your OAuth callback URLs in GitHub and Google:
-   - GitHub: `https://your-app.vercel.app/api/auth/callback/github`
-   - Google: `https://your-app.vercel.app/api/auth/callback/google`
-
-5. Deploy!
+**Note:** The base URL is automatically detected from Vercel's `VERCEL_URL` environment variable - you don't need to configure it manually!
 
 ## Security Notes
 

@@ -52,13 +52,14 @@ A tournament bracket management system for die tossing competitions with a bold 
    Create `.env.local` (see `env.example` for all options):
    ```bash
    DATABASE_URL="your-vercel-postgres-connection-string"
-   NEXT_PUBLIC_BASE_URL="http://localhost:3000"
    GITHUB_CLIENT_ID="your-github-oauth-client-id"
    GITHUB_CLIENT_SECRET="your-github-oauth-client-secret"
    GOOGLE_CLIENT_ID="your-google-oauth-client-id"
    GOOGLE_CLIENT_SECRET="your-google-oauth-client-secret"
    ADMIN_EMAILS="your-email@example.com"
    ```
+   
+   **Note:** Base URL is automatically detected (Vercel URL in production, localhost in dev)
    
    **For OAuth setup instructions**, see [AUTHENTICATION.md](./AUTHENTICATION.md)
 
@@ -80,14 +81,16 @@ A tournament bracket management system for die tossing competitions with a bold 
 ### Automatic Deployment
 
 1. **Push to GitHub** and connect to Vercel
-2. **Add environment variables** in Vercel dashboard:
+2. **Deploy once** to get your Vercel URL
+3. **Update OAuth callbacks** in GitHub and Google to use your Vercel URL
+4. **Add environment variables** in Vercel dashboard:
    - `DATABASE_URL`: Your Vercel Postgres connection string
-   - `NEXT_PUBLIC_BASE_URL`: Your production URL
    - `GITHUB_CLIENT_ID` & `GITHUB_CLIENT_SECRET`
    - `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`
    - `ADMIN_EMAILS`: Comma-separated list of admin email addresses
-3. **Deploy**: Vercel will automatically build and deploy
-4. **Update OAuth callbacks** in GitHub and Google to use your production URL
+5. **Redeploy**: Vercel will automatically build and deploy with your environment variables
+
+**Note:** Vercel automatically provides the base URL via `VERCEL_URL` - no manual configuration needed!
 
 ### Manual Deployment
 

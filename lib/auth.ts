@@ -6,17 +6,35 @@ import { eq } from "drizzle-orm";
 import { sha256 } from "@oslojs/crypto/sha2";
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 
+// Get the base URL - automatically uses Vercel's provided URL in deployments
+function getBaseUrl() {
+  // In production, prefer the provided base URL
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL;
+  }
+  
+  // Vercel automatically provides these
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // Fallback to localhost for local development
+  return 'http://localhost:3000';
+}
+
+const baseUrl = getBaseUrl();
+
 // Initialize OAuth providers
 export const github = new GitHub(
   process.env.GITHUB_CLIENT_ID!,
   process.env.GITHUB_CLIENT_SECRET!,
-  process.env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback/github"
+  `${baseUrl}/api/auth/callback/github`
 );
 
 export const google = new Google(
   process.env.GOOGLE_CLIENT_ID!,
   process.env.GOOGLE_CLIENT_SECRET!,
-  process.env.NEXT_PUBLIC_BASE_URL + "/api/auth/callback/google"
+  `${baseUrl}/api/auth/callback/google`
 );
 
 // Admin emails list
