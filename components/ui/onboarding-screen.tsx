@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { AsciiBackground } from './ascii-background'
-import { DiceAnimation } from './dice-animation'
 import { Button } from './button'
 import { useGestureSubmission } from '@/hooks/useGestureSubmission'
 
@@ -15,10 +14,10 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
   const [showFallbackButton, setShowFallbackButton] = useState(false)
   const [isTossing, setIsTossing] = useState(false)
   const [showHelpText, setShowHelpText] = useState(false)
+  const [currentFace, setCurrentFace] = useState(6) // Start with ⚅
 
   const handleToss = () => {
     setIsTossing(true)
-    // Complete onboarding after animation
   }
 
   const { isSupported, hasPermission, requestPermission, isListening } = useGestureSubmission({
@@ -35,6 +34,25 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    // Animate dice faces when tossing
+    if (isTossing) {
+      const interval = setInterval(() => {
+        setCurrentFace(prev => (prev % 6) + 1)
+      }, 100)
+
+      const timeout = setTimeout(() => {
+        clearInterval(interval)
+        onComplete()
+      }, 2000)
+
+      return () => {
+        clearInterval(interval)
+        clearTimeout(timeout)
+      }
+    }
+  }, [isTossing, onComplete])
 
   useEffect(() => {
     // Check if we should show permission prompt or fallback button
@@ -87,8 +105,8 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
             <div className="flex flex-col items-center justify-center space-y-8 px-4 z-10">
               {/* Floating dice */}
               <div className="relative">
-                <div className="text-9xl animate-bounce" style={{ animationDuration: '3s' }}>
-                  ⚅
+                <div className={isTossing ? "text-9xl animate-bounce" : "text-9xl animate-bounce"} style={{ animationDuration: '3s' }}>
+                  {['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][currentFace - 1]}
                 </div>
                 {/* Glow effect */}
                 <div className="absolute inset-0 blur-3xl bg-white/20 animate-pulse" style={{ animationDuration: '3s' }} />
@@ -155,12 +173,6 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
           </div>
         </AsciiBackground>
       </div>
-
-      {/* Dice toss animation */}
-      <DiceAnimation
-        isRolling={isTossing}
-        onComplete={onComplete}
-      />
     </>
   )
 }
