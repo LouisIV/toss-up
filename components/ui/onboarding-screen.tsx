@@ -22,7 +22,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
   const { isSupported, hasPermission, requestPermission, isListening } = useGestureSubmission({
     onToss: handleToss,
-    threshold: 15,
+    threshold: 8, // Lower threshold = more sensitive
     cooldown: 1000
   })
 
