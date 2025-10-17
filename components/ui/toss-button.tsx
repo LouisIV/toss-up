@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from './button'
+import { usePlausible } from 'next-plausible'
 
 interface TossButtonProps {
   onClick: () => void
@@ -22,6 +23,7 @@ export function TossButton({
 }: TossButtonProps) {
   const [isDesktop, setIsDesktop] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
+  const plausible = usePlausible()
 
   // Detect if we're on desktop
   useEffect(() => {
@@ -56,6 +58,15 @@ export function TossButton({
       detail: {
         onConfirmed: () => {
           clearTimeout(timeoutId)
+          
+          // Track toss button usage
+          plausible('Toss Button Used', {
+            props: {
+              buttonText: fallbackText || 'Unknown',
+              isDesktop: isDesktop,
+            }
+          })
+          
           onClick()
           setIsProcessing(false)
         },
