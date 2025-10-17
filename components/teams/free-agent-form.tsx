@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { TossButton } from '@/components/ui/toss-button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { usePlausible } from 'next-plausible'
 
 interface FreeAgentFormProps {
   onSuccess?: (result: unknown) => void
@@ -20,6 +21,7 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
   const [isSubmitting, setIsSubmitting] = useState(false)
   const submittingRef = useRef(false)
   const registerFreeAgent = useRegisterFreeAgent()
+  const plausible = usePlausible()
 
   const {
     register,
@@ -44,6 +46,14 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
     setIsSubmitting(true)
     try {
       const result = await registerFreeAgent.mutateAsync(data)
+      
+      // Track free agent signup event
+      plausible('Free Agent Signup', {
+        props: {
+          name: data.name,
+        }
+      })
+      
       reset()
       onSuccess?.(result)
     } catch (error) {
@@ -52,7 +62,7 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
       setIsSubmitting(false)
       submittingRef.current = false
     }
-  }, [isSubmitting, registerFreeAgent, reset, onSuccess])
+  }, [isSubmitting, registerFreeAgent, reset, onSuccess, plausible])
 
   const handleFormSubmit = useCallback(() => {
     if (isSubmitting || submittingRef.current) {

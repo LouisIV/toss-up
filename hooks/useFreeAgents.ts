@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FreeAgent, NewFreeAgent } from '@/lib/db/schema'
+import { usePlausible } from 'next-plausible'
 
 const API_BASE = '/api'
 
@@ -84,6 +85,7 @@ export function useWithdrawFreeAgent() {
 // Manual pairing of specific free agents
 export function usePairFreeAgents() {
   const queryClient = useQueryClient()
+  const plausible = usePlausible()
 
   return useMutation({
     mutationFn: async (agentIds: [string, string]): Promise<{ success: boolean; team: any; pairedAgents: any[] }> => {
@@ -106,6 +108,13 @@ export function usePairFreeAgents() {
       return response.json()
     },
     onSuccess: () => {
+      // Track manual free agent pairing event
+      plausible('Free Agents Paired', {
+        props: {
+          pairingType: 'manual',
+        }
+      })
+      
       queryClient.invalidateQueries({ queryKey: ['free-agents'] })
       queryClient.invalidateQueries({ queryKey: ['teams'] })
     },
@@ -115,6 +124,7 @@ export function usePairFreeAgents() {
 // Auto-pair all waiting free agents
 export function useAutoPairFreeAgents() {
   const queryClient = useQueryClient()
+  const plausible = usePlausible()
 
   return useMutation({
     mutationFn: async (): Promise<{ success: boolean; pairs: any[]; totalPaired: number }> => {
@@ -135,7 +145,16 @@ export function useAutoPairFreeAgents() {
 
       return response.json()
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Track auto free agent pairing event
+      plausible('Free Agents Paired', {
+        props: {
+          pairingType: 'auto',
+          pairCount: data.pairs?.length || 0,
+          totalPaired: data.totalPaired || 0,
+        }
+      })
+      
       queryClient.invalidateQueries({ queryKey: ['free-agents'] })
       queryClient.invalidateQueries({ queryKey: ['teams'] })
     },

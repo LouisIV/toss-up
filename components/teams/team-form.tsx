@@ -10,6 +10,7 @@ import { TossButton } from '@/components/ui/toss-button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Team } from '@/lib/db/schema'
+import { usePlausible } from 'next-plausible'
 
 interface TeamFormProps {
   initialValues?: Team
@@ -23,6 +24,7 @@ export function TeamForm({ initialValues, onSuccess, onCancel, isInDialog = fals
   const [submitError, setSubmitError] = useState<string | null>(null)
   const createTeam = useCreateTeam()
   const updateTeam = useUpdateTeam()
+  const plausible = usePlausible()
 
   const {
     register,
@@ -55,8 +57,22 @@ export function TeamForm({ initialValues, onSuccess, onCancel, isInDialog = fals
     try {
       if (initialValues) {
         await updateTeam.mutateAsync({ id: initialValues.id, ...data })
+        
+        // Track team update event
+        plausible('Team Updated', {
+          props: {
+            teamName: data.name,
+          }
+        })
       } else {
         await createTeam.mutateAsync(data)
+        
+        // Track team creation event
+        plausible('Team Created', {
+          props: {
+            teamName: data.name,
+          }
+        })
       }
       reset()
       onSuccess?.()
@@ -70,7 +86,7 @@ export function TeamForm({ initialValues, onSuccess, onCancel, isInDialog = fals
     } finally {
       setIsSubmitting(false)
     }
-  }, [isSubmitting, initialValues, updateTeam, createTeam, reset, onSuccess])
+  }, [isSubmitting, initialValues, updateTeam, createTeam, reset, onSuccess, plausible])
 
   const handleFormSubmit = useCallback(() => {
     if (isSubmitting) {

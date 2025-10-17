@@ -1,10 +1,12 @@
 import { Team, Tournament } from './db/schema'
 import { TournamentSolver, BracketData } from './tournament-solver'
 import { useCreateTournament, useUpdateTournamentBracket } from '@/hooks/useTournament'
+import { usePlausible } from 'next-plausible'
 
 export function useTournamentActions() {
   const createTournament = useCreateTournament()
   const updateBracket = useUpdateTournamentBracket()
+  const plausible = usePlausible()
 
   const createNewTournament = async (teams: Team[], tableCount: number = 1) => {
     if (teams.length < 2) {
@@ -22,6 +24,14 @@ export function useTournamentActions() {
       lineup: teams.map(team => team.id),
     })
 
+    // Track tournament creation event
+    plausible('Tournament Created', {
+      props: {
+        teamCount: teams.length,
+        tableCount: tableCount,
+      }
+    })
+
     return tournament
   }
 
@@ -37,6 +47,13 @@ export function useTournamentActions() {
     await updateBracket.mutateAsync({
       id: tournamentId,
       bracketData: updatedBracket,
+    })
+
+    // Track match result update event
+    plausible('Match Result Updated', {
+      props: {
+        tournamentId: tournamentId,
+      }
     })
 
     return updatedBracket

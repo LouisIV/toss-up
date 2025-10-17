@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Team, NewTeam } from '@/lib/db/schema'
+import { usePlausible } from 'next-plausible'
 
 const API_BASE = '/api'
 
@@ -74,6 +75,7 @@ export function useUpdateTeam() {
 // Delete a team
 export function useDeleteTeam() {
   const queryClient = useQueryClient()
+  const plausible = usePlausible()
 
   return useMutation({
     mutationFn: async (id: string): Promise<void> => {
@@ -87,6 +89,9 @@ export function useDeleteTeam() {
       }
     },
     onSuccess: () => {
+      // Track team deletion event
+      plausible('Team Deleted')
+      
       queryClient.invalidateQueries({ queryKey: ['teams'] })
     },
   })
