@@ -14,7 +14,7 @@ export default function Home() {
   const router = useRouter()
   const { data: teams = [] } = useTeams()
   const { data: tournaments = [] } = useTournaments()
-  const { hasCompletedOnboarding, isLoading, completeOnboarding } = useOnboarding()
+  const { hasCompletedOnboarding, isLoading, completeOnboarding, resetOnboarding } = useOnboarding()
 
   const handleTournamentCreated = (tournament: { id: string }) => {
     // Navigate to the new tournament page
@@ -139,6 +139,15 @@ export default function Home() {
         )}
 
       </div>
+
+      {/* Return to Landing Page Button */}
+      <button
+        onClick={resetOnboarding}
+        className="fixed bottom-4 right-4 z-50 bg-black/80 backdrop-blur-xl border border-white/30 rounded-full px-4 py-2 text-xs text-white/70 hover:text-white hover:border-white/50 transition-all duration-300 hover:shadow-xl"
+        title="View landing page again"
+      >
+        View Landing Page
+      </button>
     </div>
   )
 }
