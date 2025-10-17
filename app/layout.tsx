@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { GlobalTossModal } from "@/components/ui/global-toss-modal";
+import PlausibleProvider from 'next-plausible';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,10 +36,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          {children}
-          <GlobalTossModal />
-        </Providers>
+        <PlausibleProvider 
+          domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || ""}
+          enabled={!!process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+        >
+          <Providers>
+            {children}
+            <GlobalTossModal />
+          </Providers>
+        </PlausibleProvider>
       </body>
     </html>
   );
