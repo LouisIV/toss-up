@@ -7,6 +7,7 @@ import { AsciiBackground } from '@/components/ui/ascii-background'
 import { TeamList } from '@/components/teams/team-list'
 import { FreeAgentsStatus } from '@/components/teams/free-agents-status'
 import { TournamentControls } from '@/components/tournament/tournament-controls'
+import { AuthButton } from '@/components/ui/auth-button'
 
 export default function Home() {
   const router = useRouter()
@@ -33,17 +34,22 @@ export default function Home() {
       
       {/* Hero Section with ASCII Shader Background */}
       <AsciiBackground className="relative z-10 mx-1 mt-1 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700 border border-white/10 shadow-2xl py-6 md:py-16 px-3 md:px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-2xl md:text-5xl lg:text-7xl font-black mb-1 md:mb-4 text-white drop-shadow-2xl">
-            DIE TOSS
-          </h1>
-          <h2 className="text-sm md:text-2xl lg:text-3xl font-bold mb-3 md:mb-6 text-white drop-shadow-xl">
-            TOURNAMENT MANAGER
-          </h2>
-          <p className="text-xs md:text-base lg:text-lg text-white/95 max-w-2xl mx-auto mb-3 md:mb-6 drop-shadow-lg px-2 md:px-4">
-            Register teams, generate brackets, and track your die tossing tournament 
-            with our bold retro digital interface.
-          </p>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex justify-end mb-4 px-2 md:px-4">
+            <AuthButton />
+          </div>
+          <div className="text-center">
+            <h1 className="text-2xl md:text-5xl lg:text-7xl font-black mb-1 md:mb-4 text-white drop-shadow-2xl">
+              DIE TOSS
+            </h1>
+            <h2 className="text-sm md:text-2xl lg:text-3xl font-bold mb-3 md:mb-6 text-white drop-shadow-xl">
+              TOURNAMENT MANAGER
+            </h2>
+            <p className="text-xs md:text-base lg:text-lg text-white/95 max-w-2xl mx-auto mb-3 md:mb-6 drop-shadow-lg px-2 md:px-4">
+              Register teams, generate brackets, and track your die tossing tournament 
+              with our bold retro digital interface.
+            </p>
+          </div>
         </div>
       </AsciiBackground>
 

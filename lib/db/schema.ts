@@ -1,5 +1,23 @@
 import { pgTable, text, timestamp, uuid, jsonb, integer, type AnyPgColumn, uniqueIndex } from 'drizzle-orm/pg-core';
 
+// Authentication tables
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  githubId: text('github_id').unique(),
+  googleId: text('google_id').unique(),
+  email: text('email').unique().notNull(),
+  name: text('name'),
+  avatarUrl: text('avatar_url'),
+  role: text('role').notNull().default('user'), // 'user' or 'admin'
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const sessions = pgTable('sessions', {
+  id: text('id').primaryKey(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+});
+
 export const teams = pgTable('teams', {
   id: uuid('id').primaryKey().defaultRandom(),
   name: text('name').notNull(),
@@ -56,6 +74,10 @@ export const matches = pgTable('matches', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+export type Session = typeof sessions.$inferSelect;
+export type NewSession = typeof sessions.$inferInsert;
 export type Team = typeof teams.$inferSelect;
 export type NewTeam = typeof teams.$inferInsert;
 export type Tournament = typeof tournaments.$inferSelect;
