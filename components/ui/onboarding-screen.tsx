@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { AsciiBackground } from './ascii-background'
-import { DiceAnimation } from './dice-animation'
 import { Button } from './button'
 import { useGestureSubmission } from '@/hooks/useGestureSubmission'
 
@@ -18,7 +17,6 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
   const handleToss = () => {
     setIsTossing(true)
-    // Complete onboarding after animation
   }
 
   const { isSupported, hasPermission, requestPermission, isListening } = useGestureSubmission({
@@ -35,6 +33,17 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    // When tossing, complete onboarding after spin animation finishes
+    if (isTossing) {
+      const timer = setTimeout(() => {
+        onComplete()
+      }, 2000) // Match the spin animation duration
+
+      return () => clearTimeout(timer)
+    }
+  }, [isTossing, onComplete])
 
   useEffect(() => {
     // Check if we should show permission prompt or fallback button
@@ -87,7 +96,10 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
             <div className="flex flex-col items-center justify-center space-y-8 px-4 z-10">
               {/* Floating dice */}
               <div className="relative">
-                <div className="text-9xl animate-bounce" style={{ animationDuration: '3s' }}>
+                <div 
+                  className={`text-9xl ${isTossing ? 'animate-spin-fast' : 'animate-bounce'}`} 
+                  style={{ animationDuration: isTossing ? '2s' : '3s', animationIterationCount: isTossing ? '1' : 'infinite' }}
+                >
                   ⚅
                 </div>
                 {/* Glow effect */}
@@ -155,12 +167,6 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
           </div>
         </AsciiBackground>
       </div>
-
-      {/* Dice toss animation */}
-      <DiceAnimation
-        isRolling={isTossing}
-        onComplete={onComplete}
-      />
     </>
   )
 }
