@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { freeAgentSchema, type FreeAgentInput } from '@/lib/validations'
@@ -18,6 +18,7 @@ interface FreeAgentFormProps {
 
 export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeAgentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const submittingRef = useRef(false)
   const registerFreeAgent = useRegisterFreeAgent()
 
   const {
@@ -34,11 +35,12 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
   })
 
   const onSubmit = useCallback(async (data: FreeAgentInput) => {
-    if (isSubmitting) {
+    if (isSubmitting || submittingRef.current) {
       console.log('Free agent form submission already in progress, ignoring duplicate submission')
       return
     }
     
+    submittingRef.current = true
     setIsSubmitting(true)
     try {
       const result = await registerFreeAgent.mutateAsync(data)
@@ -48,11 +50,12 @@ export function FreeAgentForm({ onSuccess, onCancel, isInDialog = false }: FreeA
       console.error('Error registering as free agent:', error)
     } finally {
       setIsSubmitting(false)
+      submittingRef.current = false
     }
   }, [isSubmitting, registerFreeAgent, reset, onSuccess])
 
   const handleFormSubmit = useCallback(() => {
-    if (isSubmitting) {
+    if (isSubmitting || submittingRef.current) {
       console.log('Free agent form submission already in progress, ignoring button click')
       return
     }

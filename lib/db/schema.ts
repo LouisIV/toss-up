@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, jsonb, integer, type AnyPgColumn } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, jsonb, integer, type AnyPgColumn, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const teams = pgTable('teams', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -39,6 +39,10 @@ export const freeAgents = pgTable('free_agents', {
   pairedWith: uuid('paired_with').references((): AnyPgColumn => freeAgents.id),
   teamId: uuid('team_id').references((): AnyPgColumn => teams.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => {
+  return {
+    uniquePhoneIdx: uniqueIndex('free_agents_phone_unique_idx').on(table.phone)
+  }
 });
 
 export const matches = pgTable('matches', {

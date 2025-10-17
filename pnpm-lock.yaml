@@ -14,12 +14,12 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.65.0(react@19.1.0))
+      '@neondatabase/serverless':
+        specifier: ^1.0.2
+        version: 1.0.2
       '@tanstack/react-query':
         specifier: ^5.90.5
         version: 5.90.5(react@19.1.0)
-      '@vercel/postgres':
-        specifier: ^0.10.0
-        version: 0.10.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -31,16 +31,13 @@ importers:
         version: 0.31.5
       drizzle-orm:
         specifier: ^0.44.6
-        version: 0.44.6(@types/pg@8.11.6)(@vercel/postgres@0.10.0)(postgres@3.4.7)
+        version: 0.44.6(@neondatabase/serverless@1.0.2)(@types/pg@8.11.6)(@vercel/postgres@0.10.0)(postgres@3.4.7)
       lucide-react:
         specifier: ^0.546.0
         version: 0.546.0(react@19.1.0)
       next:
         specifier: 15.5.5
         version: 15.5.5(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      postgres:
-        specifier: ^3.4.7
-        version: 3.4.7
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -891,6 +888,10 @@ packages:
   '@neondatabase/serverless@0.9.5':
     resolution: {integrity: sha512-siFas6gItqv6wD/pZnvdu34wEqgG3nSE6zWZdq5j2DEsa+VvX8i/5HXJOo06qrw5axPXn+lGCxeR+NLaSPIXug==}
 
+  '@neondatabase/serverless@1.0.2':
+    resolution: {integrity: sha512-I5sbpSIAHiB+b6UttofhrN/UJXII+4tZPAq1qugzwCwLIL8EZLV7F/JyHUrEIiGgQpEXzpnjlJ+zwcEhheGvCw==}
+    engines: {node: '>=19.0.0'}
+
   '@next/env@15.5.5':
     resolution: {integrity: sha512-2Zhvss36s/yL+YSxD5ZL5dz5pI6ki1OLxYlh6O77VJ68sBnlUrl5YqhBgCy7FkdMsp9RBeGFwpuDCdpJOqdKeQ==}
 
@@ -1124,6 +1125,9 @@ packages:
 
   '@types/node@20.19.21':
     resolution: {integrity: sha512-CsGG2P3I5y48RPMfprQGfy4JPRZ6csfC3ltBZSRItG3ngggmNY/qs2uZKp4p9VbrpqNNSMzUZNFZKzgOGnd/VA==}
+
+  '@types/node@22.18.11':
+    resolution: {integrity: sha512-Gd33J2XIrXurb+eT2ktze3rJAfAp9ZNjlBdh4SVgyrKEOADwCbdUDaK7QgJno8Ue4kcajscsKqu6n8OBG3hhCQ==}
 
   '@types/pg@8.11.6':
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
@@ -4163,6 +4167,12 @@ snapshots:
   '@neondatabase/serverless@0.9.5':
     dependencies:
       '@types/pg': 8.11.6
+    optional: true
+
+  '@neondatabase/serverless@1.0.2':
+    dependencies:
+      '@types/node': 22.18.11
+      '@types/pg': 8.11.6
 
   '@next/env@15.5.5': {}
 
@@ -4363,6 +4373,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/node@22.18.11':
+    dependencies:
+      undici-types: 6.21.0
+
   '@types/pg@8.11.6':
     dependencies:
       '@types/node': 20.19.21
@@ -4548,6 +4562,7 @@ snapshots:
       ws: 8.18.3(bufferutil@4.0.9)
     transitivePeerDependencies:
       - utf-8-validate
+    optional: true
 
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
@@ -4760,6 +4775,7 @@ snapshots:
   bufferutil@4.0.9:
     dependencies:
       node-gyp-build: 4.8.4
+    optional: true
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -4902,8 +4918,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.6(@types/pg@8.11.6)(@vercel/postgres@0.10.0)(postgres@3.4.7):
+  drizzle-orm@0.44.6(@neondatabase/serverless@1.0.2)(@types/pg@8.11.6)(@vercel/postgres@0.10.0)(postgres@3.4.7):
     optionalDependencies:
+      '@neondatabase/serverless': 1.0.2
       '@types/pg': 8.11.6
       '@vercel/postgres': 0.10.0
       postgres: 3.4.7
@@ -6234,7 +6251,8 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  node-gyp-build@4.8.4: {}
+  node-gyp-build@4.8.4:
+    optional: true
 
   node-int64@0.4.0: {}
 
@@ -6411,7 +6429,8 @@ snapshots:
 
   postgres-range@1.1.4: {}
 
-  postgres@3.4.7: {}
+  postgres@3.4.7:
+    optional: true
 
   prelude-ls@1.2.1: {}
 
@@ -7004,6 +7023,7 @@ snapshots:
   ws@8.18.3(bufferutil@4.0.9):
     optionalDependencies:
       bufferutil: 4.0.9
+    optional: true
 
   y18n@5.0.8: {}
 

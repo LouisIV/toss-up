@@ -22,25 +22,24 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = freeAgentSchema.parse(body);
 
-    // Check if phone number already exists
-    const existingAgent = await db
-      .select()
-      .from(freeAgents)
-      .where(eq(freeAgents.phone, validatedData.phone))
-      .limit(1);
-
-    if (existingAgent.length > 0) {
-      return NextResponse.json(
-        { error: 'Phone number already registered as a free agent' },
-        { status: 400 }
-      );
+    // Create the free agent (unique index on phone prevents duplicates)
+    let newFreeAgent;
+    try {
+      [newFreeAgent] = await db
+        .insert(freeAgents)
+        .values(validatedData)
+        .returning();
+    } catch (e: any) {
+      // Handle unique constraint violation gracefully
+      const message = String(e?.message || '')
+      if (message.includes('free_agents_phone_unique_idx') || message.toLowerCase().includes('unique')) {
+        return NextResponse.json(
+          { error: 'Phone number already registered as a free agent' },
+          { status: 400 }
+        );
+      }
+      throw e
     }
-
-    // Create the free agent
-    const [newFreeAgent] = await db
-      .insert(freeAgents)
-      .values(validatedData)
-      .returning();
 
     // Try to pair with another waiting free agent
     const waitingAgents = await db

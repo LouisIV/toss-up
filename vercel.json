@@ -7,9 +7,5 @@
     "app/api/**/*.ts": {
       "maxDuration": 30
     }
-  },
-  "env": {
-    "POSTGRES_URL": "@postgres_url",
-    "DATABASE_URL": "@database_url"
   }
 }

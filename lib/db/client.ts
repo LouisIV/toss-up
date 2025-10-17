@@ -1,5 +1,5 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 import * as schema from './schema';
 
 // In-memory storage for local development
@@ -97,11 +97,10 @@ class InMemoryStorage {
 let db: any;
 
 try {
-  if (process.env.POSTGRES_URL || process.env.DATABASE_URL) {
-    const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL!;
-    const client = postgres(connectionString);
-    db = drizzle(client, { schema });
-    console.log('✅ Connected to PostgreSQL');
+  if (process.env.DATABASE_URL) {
+    const sql = neon(process.env.DATABASE_URL);
+    db = drizzle(sql, { schema });
+    console.log('✅ Connected to Neon Database');
   } else {
     console.log('🔧 Using in-memory storage for local development');
     db = InMemoryStorage.getInstance();

@@ -1,11 +1,12 @@
-# Vercel Deployment Guide
+# Vercel + Neon Deployment Guide
 
-This guide will help you deploy your Toss-Up tournament application to Vercel.
+This guide will help you deploy your Toss-Up tournament application to Vercel with Neon Database.
 
 ## Prerequisites
 
 1. A Vercel account (sign up at [vercel.com](https://vercel.com))
-2. Your project pushed to a Git repository (GitHub, GitLab, or Bitbucket)
+2. A Neon account (sign up at [neon.tech](https://neon.tech))
+3. Your project pushed to a Git repository (GitHub, GitLab, or Bitbucket)
 
 ## Step 1: Prepare Your Repository
 
@@ -55,23 +56,28 @@ vercel
    - Output Directory: `.next` (auto-detected)
    - Install Command: `pnpm install`
 
-## Step 3: Set Up Database
+## Step 3: Set Up Neon Database
 
-### Add Vercel Postgres
+### Create Neon Database
 
-1. In your Vercel dashboard, go to your project
-2. Navigate to the "Storage" tab
-3. Click "Create Database" → "Postgres"
-4. Choose a name for your database (e.g., `toss-up-db`)
-5. Select a region close to your users
-6. Click "Create"
+1. Go to [neon.tech](https://neon.tech) and sign up/login
+2. Click "Create Project"
+3. Choose a name for your project (e.g., `toss-up`)
+4. Select a region close to your users
+5. Choose a PostgreSQL version (15+ recommended)
+6. Click "Create Project"
 
-### Configure Environment Variables
+### Get Database Connection String
+
+1. In your Neon dashboard, go to your project
+2. Navigate to the "Connection Details" section
+3. Copy the connection string (it will look like: `postgresql://username:password@host:port/database?sslmode=require`)
+
+### Configure Environment Variables in Vercel
 
 1. In your Vercel project dashboard, go to "Settings" → "Environment Variables"
-2. Add the following variables (they should be automatically added when you create the Postgres database):
-   - `POSTGRES_URL` (automatically provided by Vercel)
-   - `DATABASE_URL` (automatically provided by Vercel)
+2. Add the following variable:
+   - `DATABASE_URL` - Paste your Neon connection string here
 
 ## Step 4: Deploy Database Schema
 
@@ -112,8 +118,7 @@ export async function GET() {
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `POSTGRES_URL` | Vercel Postgres connection string | Yes (auto-provided) |
-| `DATABASE_URL` | Alternative database URL | Yes (auto-provided) |
+| `DATABASE_URL` | Neon Database connection string | Yes |
 
 ## Build Configuration
 
@@ -131,9 +136,10 @@ The project is configured with:
 - Verify environment variables are set correctly
 
 ### Database Connection Issues
-- Confirm `POSTGRES_URL` is set in Vercel environment variables
-- Check that the database exists and is accessible
-- Verify the connection string format
+- Confirm `DATABASE_URL` is set in Vercel environment variables
+- Check that your Neon database is active and accessible
+- Verify the connection string format includes `?sslmode=require`
+- Ensure your Neon project is not paused (free tier databases pause after inactivity)
 
 ### Runtime Errors
 - Check Vercel function logs in the dashboard
@@ -157,4 +163,5 @@ The project is configured with:
 
 - [Vercel Documentation](https://vercel.com/docs)
 - [Next.js Deployment Guide](https://nextjs.org/docs/deployment)
-- [Drizzle ORM with Vercel](https://orm.drizzle.team/learn/tutorials/drizzle-with-vercel)
+- [Neon Documentation](https://neon.tech/docs)
+- [Drizzle ORM with Neon](https://orm.drizzle.team/learn/tutorials/drizzle-with-neon)
