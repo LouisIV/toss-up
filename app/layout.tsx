@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
     userScalable: false,
+    viewportFit: "cover", // iOS Safari: extend into safe areas
   },
 };
 

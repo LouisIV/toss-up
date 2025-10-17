@@ -90,14 +90,29 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black z-50">
+      <div 
+        className="fixed inset-0 bg-black z-50 overflow-hidden" 
+        style={{ 
+          height: '100dvh',
+          minHeight: '-webkit-fill-available',
+          WebkitOverflowScrolling: 'touch'
+        }}
+      >
         {/* Background gradients */}
-        <div className="fixed inset-0 bg-gradient-radial from-slate-900/20 via-transparent to-black/90 pointer-events-none" />
-        <div className="fixed inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-radial from-slate-900/20 via-transparent to-black/90 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10 pointer-events-none" />
+        
+        {/* Edge blur vignette for iOS Safari */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/80 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/80 to-transparent" />
+          <div className="absolute top-0 bottom-0 left-0 w-8 bg-gradient-to-r from-black/60 to-transparent" />
+          <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-black/60 to-transparent" />
+        </div>
         
         {/* ASCII Background with ethereal scene */}
-        <AsciiBackground className="fixed inset-0">
-          <div className="min-h-screen flex flex-col items-center justify-center relative">
+        <AsciiBackground className="absolute inset-0">
+          <div className="h-full w-full flex flex-col items-center justify-center relative" style={{ minHeight: '100dvh' }}>
             {/* Ethereal grass/field description - using text as "scenery" */}
             <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-green-900/10 to-transparent pointer-events-none" />
             
