@@ -3,6 +3,7 @@ import { db } from '@/lib/db/client';
 import { teams, freeAgents, matches } from '@/lib/db/schema';
 import { teamSchema } from '@/lib/validations';
 import { eq, or } from 'drizzle-orm';
+import { isAdmin } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
@@ -48,6 +49,15 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Require admin authentication for deleting teams
+    const isAdminUser = await isAdmin();
+    if (!isAdminUser) {
+      return NextResponse.json(
+        { error: 'Unauthorized: Admin access required' },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     
     // First, check if the team exists

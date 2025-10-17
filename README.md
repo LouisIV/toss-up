@@ -9,6 +9,8 @@ A tournament bracket management system for die tossing competitions with a bold 
 - **Table Management**: Configure number of concurrent games (tables) for tournaments
 - **Lineup Customization**: Drag-and-drop interface to set team match order
 - **Real-time Updates**: Live bracket updates with 10-second polling
+- **Admin Mode**: Secure admin access with OAuth authentication (GitHub/Google)
+- **Role-Based Access**: Admin users can delete teams and manage tournaments
 - **Retro Design**: Bold duotone colors, thick borders, and ASCII art animations
 - **Responsive**: Works on desktop and mobile devices
 - **Persistent Storage**: All data stored in Vercel Postgres
@@ -18,6 +20,7 @@ A tournament bracket management system for die tossing competitions with a bold 
 - **Frontend**: Next.js 15 (App Router), React 19, TypeScript
 - **Styling**: Tailwind CSS v4 with custom duotone theme
 - **Database**: Vercel Postgres with Drizzle ORM
+- **Authentication**: Arctic (OAuth with GitHub & Google)
 - **State Management**: TanStack Query for server state
 - **Forms**: React Hook Form with Zod validation
 - **Deployment**: Vercel (free tier compatible)
@@ -46,10 +49,18 @@ A tournament bracket management system for die tossing competitions with a bold 
    - Copy the connection string
 
 3. **Configure environment variables**:
-   Create `.env.local`:
+   Create `.env.local` (see `env.example` for all options):
    ```bash
-   POSTGRES_URL="your-vercel-postgres-connection-string"
+   DATABASE_URL="your-vercel-postgres-connection-string"
+   NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+   GITHUB_CLIENT_ID="your-github-oauth-client-id"
+   GITHUB_CLIENT_SECRET="your-github-oauth-client-secret"
+   GOOGLE_CLIENT_ID="your-google-oauth-client-id"
+   GOOGLE_CLIENT_SECRET="your-google-oauth-client-secret"
+   ADMIN_EMAILS="your-email@example.com"
    ```
+   
+   **For OAuth setup instructions**, see [AUTHENTICATION.md](./AUTHENTICATION.md)
 
 4. **Run database migrations**:
    ```bash
@@ -69,9 +80,14 @@ A tournament bracket management system for die tossing competitions with a bold 
 ### Automatic Deployment
 
 1. **Push to GitHub** and connect to Vercel
-2. **Add environment variable** in Vercel dashboard:
-   - `POSTGRES_URL`: Your Vercel Postgres connection string
+2. **Add environment variables** in Vercel dashboard:
+   - `DATABASE_URL`: Your Vercel Postgres connection string
+   - `NEXT_PUBLIC_BASE_URL`: Your production URL
+   - `GITHUB_CLIENT_ID` & `GITHUB_CLIENT_SECRET`
+   - `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET`
+   - `ADMIN_EMAILS`: Comma-separated list of admin email addresses
 3. **Deploy**: Vercel will automatically build and deploy
+4. **Update OAuth callbacks** in GitHub and Google to use your production URL
 
 ### Manual Deployment
 
@@ -85,15 +101,16 @@ A tournament bracket management system for die tossing competitions with a bold 
    vercel
    ```
 
-3. **Add environment variable** in Vercel dashboard:
-   - `POSTGRES_URL`: Your Vercel Postgres connection string
+3. **Add environment variables** in Vercel dashboard (see Automatic Deployment section)
 
 4. **Redeploy** to apply environment variables
 
 ## Database Schema
 
-The application uses four main tables:
+The application uses six main tables:
 
+- **users**: User accounts (id, github_id, google_id, email, name, avatar_url, role, created_at)
+- **sessions**: User sessions (id, user_id, expires_at)
 - **teams**: Team information (id, name, player1, player2, mascot_url, created_at)
 - **tournaments**: Tournament data (id, name, status, table_count, lineup, bracket_data, created_at)  
 - **matches**: Individual match results (id, tournament_id, team1_id, team2_id, winner_id, round, position)
