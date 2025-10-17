@@ -3,15 +3,18 @@
 import { useRouter } from 'next/navigation'
 import { useTeams } from '@/hooks/useTeams'
 import { useTournaments } from '@/hooks/useTournament'
+import { useOnboarding } from '@/hooks/useOnboarding'
 import { AsciiBackground } from '@/components/ui/ascii-background'
 import { TeamList } from '@/components/teams/team-list'
 import { FreeAgentsStatus } from '@/components/teams/free-agents-status'
 import { TournamentControls } from '@/components/tournament/tournament-controls'
+import { OnboardingScreen } from '@/components/ui/onboarding-screen'
 
 export default function Home() {
   const router = useRouter()
   const { data: teams = [] } = useTeams()
   const { data: tournaments = [] } = useTournaments()
+  const { hasCompletedOnboarding, isLoading, completeOnboarding, resetOnboarding } = useOnboarding()
 
   const handleTournamentCreated = (tournament: { id: string }) => {
     // Navigate to the new tournament page
@@ -24,6 +27,20 @@ export default function Home() {
 
   // Ensure only one active tournament exists
   const activeTournament = tournaments.find(t => t.status === 'active')
+
+  // Show loading state while checking onboarding status
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    )
+  }
+
+  // Show onboarding screen if not completed
+  if (!hasCompletedOnboarding) {
+    return <OnboardingScreen onComplete={completeOnboarding} />
+  }
 
   return (
     <div className="min-h-screen bg-black relative">
@@ -122,6 +139,16 @@ export default function Home() {
         )}
 
       </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 py-8 text-center">
+        <button
+          onClick={resetOnboarding}
+          className="text-xs text-white/40 hover:text-white/70 transition-colors duration-200 underline-offset-4 hover:underline"
+        >
+          View landing page
+        </button>
+      </footer>
     </div>
   )
 }
