@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { AsciiBackground } from './ascii-background'
 import { Button } from './button'
 import { useGestureSubmission } from '@/hooks/useGestureSubmission'
@@ -15,7 +15,6 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
   const [isTossing, setIsTossing] = useState(false)
   const [showHelpText, setShowHelpText] = useState(false)
   const [currentFace, setCurrentFace] = useState(6) // Start with ⚅
-
   const handleToss = () => {
     setIsTossing(true)
   }
@@ -26,6 +25,9 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
     cooldown: 1000
   })
 
+  // Just use a simple static text to prevent flickering
+  const displayText = 'Welcome to Die Toss'
+
   useEffect(() => {
     // Show help text after a short delay
     const timer = setTimeout(() => {
@@ -34,6 +36,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
 
     return () => clearTimeout(timer)
   }, [])
+
 
   useEffect(() => {
     // Animate dice faces when tossing
@@ -136,18 +139,12 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                 {showHelpText && (
                   <div className="animate-fade-in space-y-3">
                     <p className="text-xl md:text-2xl text-white/80 max-w-md mx-auto">
-                      {isSupported && hasPermission && isListening
-                        ? 'Flick your wrist upward to enter'
-                        : isSupported && !hasPermission
-                        ? 'Enable motion to continue'
-                        : 'Welcome to Die Toss'}
+                      {displayText}
                     </p>
                     
-                    {isSupported && hasPermission && isListening && (
-                      <p className="text-sm md:text-base text-white/60 max-w-xs mx-auto">
-                        Make an upward tossing motion with your device
-                      </p>
-                    )}
+                    <p className="text-sm md:text-base text-white/60 max-w-xs mx-auto">
+                      Make an upward tossing motion with your device
+                    </p>
                   </div>
                 )}
               </div>
