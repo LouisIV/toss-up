@@ -177,13 +177,6 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                   </Button>
                 </div>
               )}
-
-              {/* Status indicator (for debugging/feedback) */}
-              {isListening && (
-                <div className="text-xs text-white/40 animate-pulse">
-                  Listening for gesture...
-                </div>
-              )}
             </div>
           </div>
         </AsciiBackground>
