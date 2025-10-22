@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Die Toss Tournament Manager",
-  description: "A tournament bracket management system for die tossing competitions with a bold retro digital aesthetic",
+  title: "Die Toss Manager",
+  description: "A team management system for die tossing competitions with a bold retro digital aesthetic",
   viewport: {
     width: "device-width",
     initialScale: 1,

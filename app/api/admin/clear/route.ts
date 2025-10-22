@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db/client'
-import { matches, tournaments } from '@/lib/db/schema'
+import { teams, freeAgents } from '@/lib/db/schema'
 
 // DELETE /api/admin/clear
-// Dev-only helper: clears all tournaments and matches
+// Dev-only helper: clears all teams and free agents
 export async function DELETE() {
   try {
-    // Delete children first to satisfy FKs
-    await db.delete(matches)
-    await db.delete(tournaments)
+    await db.delete(freeAgents)
+    await db.delete(teams)
     return NextResponse.json({ ok: true })
   } catch (err) {
     console.error('Error clearing data:', err)

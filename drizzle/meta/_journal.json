@@ -15,6 +15,20 @@
       "when": 1760662400000,
       "tag": "0001_rename_email_to_phone",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760662500000,
+      "tag": "0002_unique_free_agents_phone",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1760662600000,
+      "tag": "0003_remove_tournament_tables",
+      "breakpoints": true
     }
   ]
 }
