@@ -15,6 +15,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
   const [isTossing, setIsTossing] = useState(false)
   const [showHelpText, setShowHelpText] = useState(false)
   const [currentFace, setCurrentFace] = useState(6) // Start with ⚅
+  const [motionControlsAttempted, setMotionControlsAttempted] = useState(false)
   const handleToss = () => {
     setIsTossing(true)
   }
@@ -65,19 +66,31 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
         setShowPermissionPrompt(true)
       }, 2000)
       return () => clearTimeout(timer)
-    } else if (!isSupported) {
-      // Not supported - show fallback button immediately
-      setShowFallbackButton(true)
-    } else if (hasPermission && !isListening) {
-      // Has permission but not listening - show fallback as backup
+    } else if (hasPermission && !isListening && motionControlsAttempted) {
+      // Has permission but not listening and we've attempted motion controls - show fallback as backup
       const timer = setTimeout(() => {
         setShowFallbackButton(true)
       }, 3000)
       return () => clearTimeout(timer)
     }
-  }, [isSupported, hasPermission, showPermissionPrompt, isListening])
+  }, [isSupported, hasPermission, showPermissionPrompt, isListening, motionControlsAttempted])
+
+  // Handle case where motion controls are not supported at all
+  useEffect(() => {
+    if (!isSupported) {
+      console.log('Motion controls not supported, setting up fallback button...')
+      // Wait a bit before showing that motion controls aren't supported
+      const timer = setTimeout(() => {
+        console.log('Showing fallback button for desktop')
+        setMotionControlsAttempted(true)
+        setShowFallbackButton(true) // Directly show fallback button for desktop
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [isSupported])
 
   const handlePermissionRequest = async () => {
+    setMotionControlsAttempted(true)
     const granted = await requestPermission()
     if (granted) {
       setShowPermissionPrompt(false)
@@ -142,9 +155,11 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                       {displayText}
                     </p>
                     
-                    <p className="text-sm md:text-base text-white/60 max-w-xs mx-auto">
-                      Make an upward tossing motion with your device
-                    </p>
+                    {isSupported && (
+                      <p className="text-sm md:text-base text-white/60 max-w-xs mx-auto">
+                        Make an upward tossing motion with your device
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -174,6 +189,7 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
                   </Button>
                 </div>
               )}
+
             </div>
           </div>
         </AsciiBackground>

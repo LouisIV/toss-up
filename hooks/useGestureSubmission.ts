@@ -42,8 +42,48 @@ export function useGestureSubmission({
 
   // Check if DeviceMotion is supported
   useEffect(() => {
-    const isSupported = 'DeviceMotionEvent' in window
-    setGestureState(prev => ({ ...prev, isSupported }))
+    const checkSupport = () => {
+      // Basic check for API existence
+      const hasAPI = 'DeviceMotionEvent' in window
+      
+      if (!hasAPI) {
+        setGestureState(prev => ({ ...prev, isSupported: false }))
+        return
+      }
+
+      // Use UserAgent and screen dimensions to detect mobile vs desktop
+      const userAgent = navigator.userAgent.toLowerCase()
+      const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent)
+      const isTablet = /ipad|android(?!.*mobile)/i.test(userAgent)
+      const screenWidth = window.screen.width
+      const screenHeight = window.screen.height
+      const isSmallScreen = screenWidth < 768 || screenHeight < 768
+      
+      console.log('Device detection:', {
+        userAgent: userAgent.substring(0, 50) + '...',
+        isMobile,
+        isTablet,
+        screenWidth,
+        screenHeight,
+        isSmallScreen
+      })
+
+      // Consider it supported if:
+      // 1. It's a mobile device (phone/tablet)
+      // 2. It's a small screen (likely mobile)
+      // 3. It has iOS requestPermission (definitely mobile)
+      const isLikelyMobile = isMobile || isTablet || isSmallScreen || typeof (DeviceMotionEvent as any).requestPermission === 'function'
+      
+      if (isLikelyMobile) {
+        console.log('Mobile device detected - motion controls supported')
+        setGestureState(prev => ({ ...prev, isSupported: true }))
+      } else {
+        console.log('Desktop device detected - motion controls not supported')
+        setGestureState(prev => ({ ...prev, isSupported: false }))
+      }
+    }
+
+    checkSupport()
   }, [])
 
   // Request permission and start listening
