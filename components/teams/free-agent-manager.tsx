@@ -56,10 +56,16 @@ export function FreeAgentManager() {
   }, [autoPairFreeAgents])
 
   const handleWithdraw = useCallback(async (agentId: string) => {
+    if (!window.confirm('Are you sure you want to withdraw this free agent?')) {
+      return
+    }
+    
     try {
       await withdrawFreeAgent.mutateAsync(agentId)
+      console.log('Successfully withdrew free agent')
     } catch (error) {
       console.error('Error withdrawing agent:', error)
+      alert(`Failed to withdraw free agent: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }, [withdrawFreeAgent])
 
@@ -186,7 +192,7 @@ export function FreeAgentManager() {
                   size="sm"
                   className="border-red-400 text-red-400 hover:bg-red-400/10"
                 >
-                  Withdraw
+                  {withdrawFreeAgent.isPending ? 'Withdrawing...' : 'Withdraw'}
                 </Button>
               </div>
             ))}

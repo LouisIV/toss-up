@@ -38,18 +38,24 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    console.log('Attempting to delete free agent with ID:', id);
+    
     const result = await db
       .delete(freeAgents)
       .where(eq(freeAgents.id, id))
       .returning();
 
+    console.log('Delete result:', result);
+
     if (result.length === 0) {
+      console.log('No free agent found with ID:', id);
       return NextResponse.json(
         { error: 'Free agent not found' },
         { status: 404 }
       );
     }
 
+    console.log('Successfully deleted free agent:', result[0]);
     return NextResponse.json({ message: 'Free agent deleted successfully' });
   } catch (error) {
     console.error('Error deleting free agent:', error);
