@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "vercel-build": "drizzle-kit push || echo 'Migration skipped (no DATABASE_URL)' && next build",
+    "vercel-build": "drizzle-kit push && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
@@ -25,6 +25,7 @@
     "lucide-react": "^0.546.0",
     "next": "15.5.5",
     "next-plausible": "^3.12.4",
+    "postgres": "^3.4.7",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hook-form": "^7.65.0",

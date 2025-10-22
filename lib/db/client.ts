@@ -6,5 +6,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL environment variable is required');
 }
 
+// For Vercel + Neon integration, we use the Neon serverless driver
+// This works for both local development (if using Neon) and production
 const sql = neon(process.env.DATABASE_URL);
 export const db = drizzle(sql, { schema });
