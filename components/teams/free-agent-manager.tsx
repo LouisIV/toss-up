@@ -5,7 +5,6 @@ import { useFreeAgents, usePairFreeAgents, useAutoPairFreeAgents, useWithdrawFre
 import { Button } from '@/components/ui/button'
 import { TossButton } from '@/components/ui/toss-button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { FreeAgent } from '@/lib/db/schema'
 
 export function FreeAgentManager() {
   const { data: freeAgents, isLoading, error } = useFreeAgents()

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db/client';
-import { teams, freeAgents, matches } from '@/lib/db/schema';
+import { teams, freeAgents } from '@/lib/db/schema';
 import { teamSchema } from '@/lib/validations';
-import { eq, or } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 export async function PUT(
   request: NextRequest,
@@ -71,18 +71,7 @@ export async function DELETE(
       .set({ teamId: null, status: 'waiting' })
       .where(eq(freeAgents.teamId, id));
 
-    // 2. Delete matches that involve this team
-    await db
-      .delete(matches)
-      .where(
-        or(
-          eq(matches.team1Id, id),
-          eq(matches.team2Id, id),
-          eq(matches.winnerId, id)
-        )
-      );
-
-    // 3. Finally, delete the team
+    // 2. Finally, delete the team
     const [deletedTeam] = await db
       .delete(teams)
       .where(eq(teams.id, id))
