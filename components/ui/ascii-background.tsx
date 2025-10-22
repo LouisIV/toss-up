@@ -167,19 +167,6 @@ export function AsciiBackground({ children, className = '' }: AsciiBackgroundPro
     const pre = preRef.current
     if (!pre) return
 
-    // Set up the pre element styling
-    pre.style.fontFamily = 'monospace'
-    pre.style.fontSize = 'clamp(8px, 1.5vw, 16px)'
-    pre.style.lineHeight = '1.05'
-    pre.style.fontWeight = '100'
-    pre.style.letterSpacing = '0.01em'
-    pre.style.color = 'rgba(255, 255, 255, 0.25)'
-    pre.style.userSelect = 'none'
-    pre.style.whiteSpace = 'pre'
-    pre.style.overflow = 'hidden'
-    pre.style.margin = '0'
-    pre.style.padding = '0'
-
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
@@ -199,17 +186,33 @@ export function AsciiBackground({ children, className = '' }: AsciiBackgroundPro
 
   return (
     <div className={`relative ${className}`}>
-      {/* ASCII Liquid Glass Effect */}
-      <pre
-        ref={preRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        style={{ zIndex: 1 }}
-      />
-      
       {/* Content */}
       <div className="relative z-10">
         {children}
       </div>
+      
+      {/* ASCII Liquid Glass Effect */}
+      <pre
+        ref={preRef}
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={{ 
+          zIndex: 1,
+          margin: 0,
+          padding: 0,
+          border: 'none',
+          outline: 'none',
+          background: 'transparent',
+          overflow: 'hidden',
+          whiteSpace: 'pre',
+          fontFamily: 'monospace',
+          fontSize: 'clamp(8px, 1.5vw, 16px)',
+          lineHeight: '1.05',
+          fontWeight: '100',
+          letterSpacing: '0.01em',
+          color: 'rgba(255, 255, 255, 0.25)',
+          userSelect: 'none'
+        }}
+      />
     </div>
   )
 }
