@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useGestureSubmission } from '@/hooks/useGestureSubmission'
 import { Button } from './button'
 
 interface TossConfirmationProps {
@@ -14,8 +13,7 @@ export function TossConfirmation({ onConfirmed, onCancelled }: TossConfirmationP
   const [currentFace, setCurrentFace] = useState(1)
   const [hasPermission, setHasPermission] = useState(false)
   const [permissionRequested, setPermissionRequested] = useState(false)
-  const [isReady, setIsReady] = useState(false)
-  const [debugInfo, setDebugInfo] = useState('')
+  const [debugInfo] = useState('')
 
   console.log('🎲 TOSS CONFIRMATION COMPONENT RENDERED!')
   
@@ -62,8 +60,7 @@ export function TossConfirmation({ onConfirmed, onCancelled }: TossConfirmationP
         
         // Add a small delay before allowing toss detection
         setTimeout(() => {
-          console.log('🎲 Setting isReady to true')
-          setIsReady(true)
+          console.log('🎲 Ready for toss detection')
         }, 1000)
       }
     }

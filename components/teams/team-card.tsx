@@ -14,7 +14,6 @@ interface TeamCardProps {
 
 export function TeamCard({ team }: TeamCardProps) {
   const [isEditing, setIsEditing] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
   const deleteTeam = useDeleteTeam()
 
   const handleDelete = async () => {

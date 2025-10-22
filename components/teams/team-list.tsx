@@ -13,6 +13,9 @@ export function TeamList() {
   const [isAddingFreeAgent, setIsAddingFreeAgent] = useState(false)
   const [registrationMode, setRegistrationMode] = useState<'team' | 'free-agent' | null>(null)
   const { data: teams, isLoading, error } = useTeams()
+  
+  // Debug log to ensure state is defined
+  console.log('registrationMode:', registrationMode)
 
   if (isLoading) {
     return (
