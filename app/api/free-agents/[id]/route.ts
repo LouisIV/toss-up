@@ -40,20 +40,33 @@ export async function DELETE(
     const { id } = await params;
     console.log('Attempting to delete free agent with ID:', id);
     
-    const result = await db
-      .delete(freeAgents)
+    // First, check if the free agent exists
+    const existingAgent = await db
+      .select()
+      .from(freeAgents)
       .where(eq(freeAgents.id, id))
-      .returning();
+      .limit(1);
 
-    console.log('Delete result:', result);
-
-    if (result.length === 0) {
+    if (!existingAgent.length) {
       console.log('No free agent found with ID:', id);
       return NextResponse.json(
         { error: 'Free agent not found' },
         { status: 404 }
       );
     }
+
+    // Handle foreign key constraints by updating related records first
+    // 1. Update any free agents that are paired with this agent
+    await db
+      .update(freeAgents)
+      .set({ pairedWith: null, status: 'waiting' })
+      .where(eq(freeAgents.pairedWith, id));
+
+    // 2. Now delete the free agent
+    const result = await db
+      .delete(freeAgents)
+      .where(eq(freeAgents.id, id))
+      .returning();
 
     console.log('Successfully deleted free agent:', result[0]);
     return NextResponse.json({ message: 'Free agent deleted successfully' });
